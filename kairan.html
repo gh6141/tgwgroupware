@@ -1,0 +1,444 @@
+<style type="text/css">
+td, th {
+padding: 5px 10px;
+}
+</style>
+
+<div class="page" id="kairanL">
+ <h2>回覧板一覧</h2>
+<div align='center'>
+ <div id="delmsg2"></div>  
+ <span title="作成者が空欄だとキーワードのみで検索します。キーワードが空欄だと作成者のみで検索します。作成者とキーワードの両方の指定もできます。">
+ <select id="user_srch" name="user_srch" ><option value="">　　　　</option></select>の回覧を
+ <input type='text' id='kensaku' name='kensaku' size="7" value="">で
+ <!-- <input type='text' id=limmax name='limmax' size="5" value="100">件まで -->
+ <button onclick="doAction('*','A','*','kairanlist_kensaku')" title="最大１００件まで表示します。">検索</button>  
+ </span>
+　　　
+<!-- <button onclick="doAction('*','A','*','kairanlist_pgn')" title="再読み込みして最新の一覧を表示します。">再表示</button>  -->
+ <a class="link" href="kairanL" title="朝の混雑時は、サイトに負荷がかかりやすいので、再表示は必要最小限でお願いします。（ページ移動はとくに制限ありません。）">再表示</a>　　　
+
+ <input type="button" name="btn" id='kairansinkiLink' value="新規作成">   
+</div>
+     <div id ="pagination_content">
+        <ul class="pagination">
+      <!--      <li id="first">&nbsp;<<&nbsp;</li>
+            <li id="prev">&nbsp;<&nbsp;</li>
+            <li class="count"></li>
+            <li id="next">&nbsp;>&nbsp;</li>
+            <li id="last">&nbsp;>>&nbsp;</li><br> -->
+                  <li id="firstpgn" title="最初のページへ移動">&nbsp;<<&nbsp;</li>
+            <li id="prevpgn" title="前のページへ移動">&nbsp;<&nbsp;</li>
+            <li class="count"></li>
+            <li id="nextpgn" title="次のページへ移動">&nbsp;>&nbsp;</li>
+            <li id="lastpgn" title="最後のページへ移動">&nbsp;>>&nbsp;</li>
+        </ul>
+        <div id='waitMsg'></div>
+    </div>
+
+     <table class="menu_list" border="1" cellspacing="0" cellpadding="0" align="center" width="95%">
+        <thead>
+            <tr>
+                <td >作成日時(閲覧可能日数）</td>
+                <td>タイトル</td>
+                  <td >　作成者　</td>
+                    <td >閲覧状況</td>
+                    <td>既読数</td>
+                    <td title="作成者のみ編集・削除ができます。">編集・削除</td>
+            </tr>
+        </thead>
+            <tbody id='kairanLtbody'>              
+        </tbody>
+     </table>
+
+    
+</div>
+
+<div class="page" id="kairanPg">
+ <h2>回覧板メッセージ</h2>
+ <div align="center">
+ <!--<a class="link" href="kairanL" title="朝の混雑時は、サイトに負荷がかかりやすいので、回覧一覧の表示回数は必要最小限でお願いします。（↑↓ボタンによるメッセージ移動はとくに制限ありません。）">回覧一覧</a>-->　　  <input type="button" name="mailUketori" id='mailUketori' value="メールでデータを受け取る" title="回覧データは保存期限があります。保存が必要な方は、このボタンをクリックして、Gmailで受け取り、保管してください。ただし、回覧の添付データはメールでは送信しないので、別にダウンロードして保管してください。">　　　　    <input type="button" name="kairanNext" id='kairanNext' value="↑" title="次の新しいメッセージに移動">　 <input type="button" name="kairanPrev" id='kairanPrev' value="↓" title="ひとつ前の古いメッセージに移動">
+ <div id='mailUketoriMsg'></div>
+</div>
+ <div id="kairanMsg">
+ <table  border="1" cellspacing="0" cellpadding="0" align="center" width="95%" style="margin:5px;">
+   <tbody>
+<tr>
+  <th width="15%">回覧番号</th>
+  <td>
+    <div id='rkidnum'></div>
+  </td>
+</tr>
+<tr>
+  <th>作成者</th>
+  <td>
+    <div id='rkhassinsha'></div>
+    <input type="button" name="btnReply" id='kairanReply' value="返信" title="この回覧メッセージの作成者に返信したいときにクリックしてください。">
+  </td>
+</tr>
+<tr>
+  <th>タイトル</th>
+  <td>
+       <div id='rktitle'></div>
+  </td>
+</tr>
+<tr>
+  <th>作成日時</th>
+  <td>
+    <div id='rkdate'></div>
+  </td>
+</tr>
+<tr>
+  <th>本文</th>
+  <td>
+    <div id='rkhonbun'></div>
+  </td>
+</tr>
+<tr>
+  <th>添付ファイル</th>
+  <td>
+     <div id='rktenpuL' title='クリックしてダウンロードしてください。'></div>
+  </td>
+</tr>
+<tr>
+  <th>削除予定期日</th>
+  <td>
+    <div id='rkdelete_date'></div>
+  </td>
+</tr>
+<tr>
+  <th>回覧先</th>
+  <td>
+    <div id='rkatesaki'></div>
+  </td>
+</tr>
+</tbody>
+ </table>  
+ <input type='hidden' id='rkhassinshaid' value=''>
+
+  
+ </div>
+
+   
+
+
+</div>  
+
+ <div class="page" id="kairan">
+   
+       <h2 id='kPageName'></h2>
+    　　<form name='kairanform' id='kairanform' style="margin:0px;">
+            　　　　　　　　<!--　<a class="link" href="kairanL"  align="center">回覧一覧</a>-->　      　　<input id="kairansinkibtn" type="button" name="btn" onclick="google.script.run.kairanSet(this.parentNode);" value="送信" ><input id="kairanhenkobtn" type="button" name="btn" onclick="google.script.run.kairanHenko(this.parentNode);" value="変更" >    
+             <span class="blinking" id="kairanmsgSinkiHenko" style="color:#f00;font-weigth:bold;"></span>  <input id="kanranCacel" type="button" name="kairanCancel" onclick="kairanlist();" value="キャンセル" > 
+        <table  border="1" cellspacing="0" cellpadding="0" align="center" width="99%" style="margin:5px;" id="kairanTbl">
+            <tbody>
+                    <tr>
+                    <th width="20%">作成日</th>
+                    <td>
+                         <input type="text" name="date" id="date" readonly>  <input type="hidden" name="idnum" id="idnum" >
+                    </td>
+                </tr>
+                <tr>
+                    <th>回覧先</th>
+                    <td>
+　　　　　             <input type="hidden" name="atesaki" id="atesaki"> 
+                   <!--     <input type="text" name="atesaki" id="atesaki"> -->
+<div id="atesakidisp"></div>
+<a class="link" href="atesakidlg">回覧先入力</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>タイトル</th>
+                    <td>
+                          <input type="text" name="title" id="title" size="100">
+                    </td>
+                </tr>
+                <tr>
+                    <th>本文</th>
+                    <td>
+
+<textarea name="honbun" cols=60 rows=6 id="honbun" value="" style="display:none" ></textarea>  
+ <!-- <textarea name="honbun" cols=60 rows=6 id="honbun" value=""  ></textarea> -->
+
+<div align="left" title="強調したい文字を選択してから、各種修飾ができます。">
+　　<font size=-1>
+文字サイズ:
+    <select id="fontSizeSelecter">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+    </select>
+文字色:
+    <select id="fontColorSelecter">
+        <option value="#2980b9">黒</option>
+        <option value="blue">青</option>
+        <option value="red">赤</option>
+        <option value="yellow">黄</option>
+        <option value="green">緑</option>
+        <option value="violet">紫</option>
+    </select>
+背景色:
+    <select id="bgColorSelecter">
+        <option value="white">白</option>
+        <option value="black">黒</option>
+        <option value="blue">青</option>
+        <option value="red">赤</option>
+        <option value="yellow">黄</option>
+        <option value="green">緑</option>
+        <option value="violet">紫</option>
+    </select>
+   <button type="button" id="boldButton" class="min">太字</button>
+        <button id="underLineButton" type="button" class="min">下線</button>
+        <button id="ialicBotton" type="button" class="min">イタリック</button>
+  
+         <br>
+
+
+</font>
+</div>
+                        <p>
+                        <div name='editArea' id="editArea" style="width:90%;height:120px;border-style:inset;text-align:left;"  contentEditable="true" class="box_srcollbar"></div>  
+           <!-- <div name='editArea' id="editArea" style="width:90%;height:120px;border-style:inset;text-align:left"  contentEditable="true" ></div>  -->
+                        </p>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>作成者</th>
+                    <td>
+                         <input type="hidden" name="hassinsha" id="hassinsha">
+                         <div id="hassinshadisp"></div>
+                    </td>
+                </tr>
+                            <tr>
+                    <th>添付ファイル</th>
+                    <td>
+
+      <input type="file" id="my_files" multiple>
+      <button id='gdriveFTD' type='button'>添付クリア</button>
+                           <label id="upload_label"></label>
+                           <div name="upload_div" id="upload_div"></div>
+                                                   <input type="hidden" name="tenpu" id="tenpu">
+                         <textarea name="tenpuL" id="tenpuL" style="visibility: hidden;"></textarea>
+                         <textarea name="tenpuLtmp" id="tenpuLtmp" style="visibility: hidden;"></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                     <th>回覧データ保存期間指定</th>
+                     <td>
+                        <select name="khozonkikan" id="khozonkikan" title='必要に応じて保存期間を変更できます。保存期間以後は自動で削除されます。' readonly>
+                 <option value="3" >３日</option>
+                 <option value="7" >1週間</option>
+                 <option value="14" selected>２週間</option>
+                <option value="30" >1か月</option>
+                <option value="61" >2か月</option>
+                 <option value="183">６か月</option>
+                 <option value="365">１年</option>
+                 <option value="730">２年</option>
+                 <option value="2555">７年</option>
+                 <option value="5475">１５年</option>
+             </select>後の           
+           <input type="text" name="delete_date" id="delete_date" value="" readonly>以降削除
+                     </td>
+                </tr>  
+            </tbody>
+        </table><!-- end table -->
+ 
+
+    
+      　  
+   　　 </form>
+
+ <form>
+    <div>
+
+    </div>
+  </form>
+  <br>
+
+
+
+    </div>
+
+
+
+<div class="page" id="atesakidlg" style="text-align:center;">
+ <h2>宛先</h2>
+  
+ 
+<input type="button" name="btn" id='atesakiTekiyo' value="適用" >     
+
+ <div id="dialog-form_atesaki" title="回覧先の選択" style="text-align:left;">
+  <table style='margin: 0 auto;width:600px;' >
+    <tr><td>グループの表示</td><td>回覧先を選択</td></tr>
+    <tr>
+      <td style='vertical-align:top;'>
+        <div class="ScrollBox" id="group"  style="padding:10px;"　 title="グループ名を選択すると、メンバーが右欄に表示されます。">
+　        <input type="radio" name="radio" class='radioｚ' id='radioall' checked >「全職員」<br><br>
+
+        </div>
+      </td>
+      <td style="width:300px;">
+        <div class="ScrollBox" id="alist"  style="padding:10px;"　 title="「全員」をクリックすると、メンバー全員にチェックが入ります。もう一度クリックすると、全員のチェックがはずれます。回覧したい人のチェックを確認したら、「適用」をクリックしてください。">
+　         <input type="checkbox" id="checkall"><div id="chall" style="display:inline;"　>「全員」を選択</div><br><br>
+         </div>
+      </td>
+     </tr>
+  </table>
+</div>
+
+
+</div>
+
+<script>
+function formatDate(dt) {
+  var y = dt.getFullYear();
+  var m = ('00' + (dt.getMonth()+1)).slice(-2);
+  var d = ('00' + dt.getDate()).slice(-2);  
+  var h=('00' + dt.getHours()).slice(-2);
+  var mi=('00' + dt.getMinutes()).slice(-2);
+  return (y + '/' + m + '/' + d+' '+h+':'+mi);
+}
+
+
+function formatDate_dateOnly(dt) {
+  var y = dt.getFullYear();
+  var m = ('00' + (dt.getMonth()+1)).slice(-2);
+  var d = ('00' + dt.getDate()).slice(-2);  
+  return (y + '/' + m + '/' + d);
+}
+
+
+ 
+
+  $('#khozonkikan').change(function() {
+    var dateDl2 = new Date();  
+  dateDl2.setDate(dateDl2.getDate() + Number($('#khozonkikan option:selected').val()));
+  $('#delete_date').val(formatDate_dateOnly(dateDl2));
+});
+
+   //getElementById の短縮
+    var $id = function (id) {
+        return document.getElementById(id); };
+
+    //innerText をサポートしない Web ブラウザと共通で使用するための 
+    //setText 関数を定義   
+ function setAlter_innerText(element) {        
+       if (element.innerText) {        
+          element.setText = function (text) {
+              element.innerText = text; }        
+       } else {
+          element.setText = function (text) {
+           element.textContent = text; }        
+       }
+       return element;
+    }
+
+
+
+//****************moji shushoku*******************************************
+     editArea = $id("editArea");
+             ritchTextHtmlArea = $id("honbun");
+
+            //innerText を設定するためのメソッドを追加
+            setAlter_innerText(editArea);
+            setAlter_innerText(ritchTextHtmlArea);
+
+//*******************************
+            //フォントサイズを指定するドロップダウンリストのイベントハンドラ
+            $id("fontSizeSelecter")
+                .addEventListener("change", function () {
+                    if (checkSelectionText()) {
+                        document.execCommand('fontSize', false, this.value);
+                        $('#honbun').val($('#editArea').html());
+                    }
+
+                });
+
+
+            //フォントカラーを指定するドロップダウンリストのイベントハンドラ
+            $id("fontColorSelecter").addEventListener("change", function () {
+                if (checkSelectionText()) {
+                    document.execCommand('ForeColor', false, this.value);
+                    $('#honbun').val($('#editArea').html());
+                }
+            });
+
+            //背景色を指定するドロップダウンリストのイベントハンドラ
+            $id("bgColorSelecter").addEventListener("change", function () {
+                if (checkSelectionText()) {
+                    document.execCommand('backColor', false, this.value);
+                    $('#honbun').val($('#editArea').html());
+                }
+            });
+
+
+            //[太字] ボタン
+            $id("boldButton").addEventListener("click", function () {
+                if (checkSelectionText()) {
+                    document.execCommand("bold", false);
+                    $('#honbun').val($('#editArea').html());
+                }
+            });
+
+            //[下線] ボタン
+            $id("underLineButton").addEventListener("click", function () {
+                if (checkSelectionText()) {
+                    document.execCommand("underline", false);
+                    $('#honbun').val($('#editArea').html());
+                }
+            });
+
+            //[イタリック] ボタン
+            $id("ialicBotton").addEventListener("click", function () {
+                if (checkSelectionText()) {
+                    document.execCommand("italic", false);
+                    $('#honbun').val($('#editArea').html());
+                }
+            });
+
+
+
+//************************
+ 
+
+
+            //文字が選択されているか判断
+            function checkSelectionText() {
+                 selectionFlag = (document.getSelection().toString().length > 0);
+                if (!selectionFlag) {
+                    alert("文字が選択されていません。\n文字を選択してください。");
+                }
+                return selectionFlag;
+            }
+
+function inputChange(){
+ // honbun.innerText = edarea.value;
+ $('#honbun').val($('#editArea').html());
+ let preEsc=$('#honbun').val();
+ let afterEsc=preEsc.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+
+ let afterEscAdd_Blank='';
+ if (afterEsc.indexOf('_blank') !== -1) {
+  //alert('含まれています。');
+  afterEscAdd_Blank=afterEsc;
+} else{
+   //target:"_blankないときは、追加する
+  afterEscAdd_Blank=afterEsc.replace("<a ","<a target='_blank' ");
+}
+  $('#honbun').val(afterEscAdd_Blank);
+ }
+
+editArea.addEventListener('keyup', inputChange);        
+//**************moji shushoku end*************
+
+
+
+
+
+</script>
